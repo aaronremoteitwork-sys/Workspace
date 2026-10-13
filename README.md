@@ -1,0 +1,38 @@
+# Workspace — locked-down home screen for the Zebra TC52
+
+A simple home screen that shows only your apps.
+
+## What it shows
+
+- **Your own apps, automatically:** any installed app signed with the same key as Workspace
+  (ILS, Printers, anything you build later). Install a new one and it appears; no Workspace update needed.
+- **Camera, Chrome, and a Wi-Fi shortcut** (only the Wi-Fi page, not all of Settings).
+
+## Controls
+
+- **Settings gear (top-right):** anyone can change the background color (presets or a custom
+  `#RRGGBB`) and check for updates. White is the default.
+- **Admin exit (top-left):** tap the top-left corner **3 times quickly**. A menu offers:
+  open the normal home screen, open Settings, or change the default home app.
+- The Back button does nothing on the home screen.
+
+## Making it the home screen
+
+On first launch, Workspace shows a **"Make Workspace the home screen"** button. Tap it and pick
+Workspace. After that, the Home button always returns to Workspace.
+
+For full lockdown (no notification shade, no Recents, other apps blocked), use a StageNow profile
+with Zebra MX. Workspace alone doesn't block those.
+
+## Updates
+
+Same setup as ILS: every push to `main` builds and publishes `Workspace.apk` to the latest GitHub release.
+Workspace checks for a new version about every 6 hours and offers to install it. Its settings are kept.
+
+Latest APK: `https://github.com/aaronremoteitwork-sys/Workspace/releases/latest/download/Workspace.apk`
+
+## Signing — important
+
+Workspace **must** use the same `ils.jks` key as ILS. That shared key is how it recognizes your apps.
+In the Workspace GitHub repo, add the same two secrets as ILS: `ILS_KEYSTORE_B64` and `ILS_KEY_PASSWORD`.
+`app/ils.jks` is excluded by `.gitignore` and never uploaded.

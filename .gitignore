@@ -1,0 +1,12 @@
+.gradle/
+build/
+app/build/
+local.properties
+.idea/
+*.iml
+.DS_Store
+captures/
+
+# Signing key: never commit. It lives in the ILS_KEYSTORE_B64 GitHub secret.
+*.jks
+*.keystore

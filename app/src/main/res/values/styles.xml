@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ws_primary">#1F3A5F</color>
+    <color name="ws_accent">#F2A900</color>
+    <color name="ic_bg">#1F3A5F</color>
+
+    <style name="WorkspaceTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/ws_primary</item>
+        <item name="android:colorPrimaryDark">@color/ws_primary</item>
+        <item name="android:colorAccent">@color/ws_accent</item>
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowShowWallpaper">false</item>
+    </style>
+</resources>

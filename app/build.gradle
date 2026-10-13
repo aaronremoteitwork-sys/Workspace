@@ -1,0 +1,47 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.ils.workspace'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.ils.workspace"
+        minSdk 26          // TC52 shipped with Android 8.1 (API 27)
+        targetSdk 34
+        // GitHub Actions bumps the version on every build so updates install over the old app.
+        def run = (System.getenv('GITHUB_RUN_NUMBER') ?: '1') as Integer
+        versionCode run
+        versionName "1.0.${run}"
+    }
+
+    // One fixed key for every build, so a new APK always installs over the old one
+    // without losing its settings. The key file (ils.jks) is NOT committed to GitHub;
+    // the build workflow recreates it from the ILS_KEYSTORE_B64 secret.
+    signingConfigs {
+        ils {
+            storeFile file('ils.jks')
+            storePassword System.getenv('ILS_KEY_PASSWORD') ?: 'ilsstore'
+            keyAlias 'ils'
+            keyPassword System.getenv('ILS_KEY_PASSWORD') ?: 'ilsstore'
+        }
+    }
+
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.ils
+        }
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.ils
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+// No third-party libraries: the app uses only the Android framework.

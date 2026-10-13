@@ -1,0 +1,55 @@
+name: Build Workspace APK
+
+# Every push to main builds a new Workspace.apk and publishes it as the latest GitHub release.
+# Permanent download link (use this in StageNow):
+#   https://github.com/<your-username>/Workspace/releases/latest/download/Workspace.apk
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Restore signing key
+        env:
+          ILS_KEYSTORE_B64: ${{ secrets.ILS_KEYSTORE_B64 }}
+        run: |
+          if [ -z "$ILS_KEYSTORE_B64" ]; then
+            echo "::error::Add the ILS_KEYSTORE_B64 secret (Settings > Secrets and variables > Actions)"
+            exit 1
+          fi
+          echo "$ILS_KEYSTORE_B64" | base64 -d > app/ils.jks
+
+      - name: Build APK
+        env:
+          ILS_KEY_PASSWORD: ${{ secrets.ILS_KEY_PASSWORD }}
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon
+          cp app/build/outputs/apk/release/app-release.apk Workspace.apk
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Workspace 1.0.${{ github.run_number }}
+          files: Workspace.apk
+          make_latest: true
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Workspace-apk
+          path: Workspace.apk
