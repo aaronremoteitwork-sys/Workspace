@@ -9,8 +9,6 @@ import android.content.pm.Signature;
 import android.content.pm.SigningInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.provider.MediaStore;
-import android.provider.Settings;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +20,7 @@ import java.util.Set;
 /**
  * Decides which apps appear on the Workspace home screen:
  * every installed app signed with the same key as Workspace (ILS, Printers, anything you build later),
- * followed by Camera, Chrome and a Wi-Fi settings shortcut.
+ * followed by Chrome.
  */
 final class Apps {
 
@@ -61,17 +59,6 @@ final class Apps {
 
         List<Entry> out = new ArrayList<>(mine);
 
-        // Camera
-        Intent cam = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-        ResolveInfo camInfo = pm.resolveActivity(cam, 0);
-        if (camInfo != null) {
-            Entry e = new Entry();
-            e.label = "Camera";
-            e.icon = camInfo.loadIcon(pm);
-            e.intent = cam.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            out.add(e);
-        }
-
         // Chrome
         Intent chrome = pm.getLaunchIntentForPackage(CHROME);
         if (chrome != null) {
@@ -83,17 +70,6 @@ final class Apps {
                 e.icon = pm.getDefaultActivityIcon();
             }
             e.intent = chrome.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            out.add(e);
-        }
-
-        // Wi-Fi settings page only (not all of Settings)
-        Intent wifi = new Intent(Settings.ACTION_WIFI_SETTINGS);
-        ResolveInfo wifiInfo = pm.resolveActivity(wifi, 0);
-        if (wifiInfo != null) {
-            Entry e = new Entry();
-            e.label = "Wi-Fi";
-            e.icon = c.getDrawable(R.drawable.ic_wifi);
-            e.intent = wifi.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             out.add(e);
         }
         return out;

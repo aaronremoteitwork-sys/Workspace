@@ -5,7 +5,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
-    <!-- Apps Workspace needs to see on Android 11+ -->
+    <!-- Serial number: Zebra OEMInfo on Android 10+, Build.getSerial() on Android 8/9 -->
+    <uses-permission android:name="com.zebra.provider.READ" />
+    <uses-permission
+        android:name="android.permission.READ_PHONE_STATE"
+        android:maxSdkVersion="28" />
+
+    <!-- Apps and services Workspace needs to see on Android 11+ -->
     <queries>
         <intent>
             <action android:name="android.intent.action.MAIN" />
@@ -16,12 +22,12 @@
             <category android:name="android.intent.category.HOME" />
         </intent>
         <intent>
-            <action android:name="android.media.action.STILL_IMAGE_CAMERA" />
-        </intent>
-        <intent>
-            <action android:name="android.settings.WIFI_SETTINGS" />
+            <action android:name="android.intent.action.GET_CONTENT" />
+            <data android:mimeType="image/*" />
         </intent>
         <package android:name="com.android.chrome" />
+        <package android:name="com.zebra.zebracontentprovider" />
+        <provider android:authorities="oem_info" />
     </queries>
 
     <application
